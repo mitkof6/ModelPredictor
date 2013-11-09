@@ -39,7 +39,7 @@ public class Animator extends Frame implements GLEventListener {
 	
 	private Camera camera;
 	
-	public Vector<Drawable> drawable;
+	private Vector<Drawable> drawable;
 
 	/**
 	 * Constructor
@@ -58,9 +58,6 @@ public class Animator extends Frame implements GLEventListener {
 				setVisible(false);
 			}
 		});
-
-	
-
 
 		//profile init
 		glp = GLProfile.getDefault();
@@ -89,9 +86,16 @@ public class Animator extends Frame implements GLEventListener {
 		//animator
 		animator = new FPSAnimator(canvas, Constant.ANIMATOR_FPS);
 		animator.add(canvas);
-		animator.start();
 	}
 
+	public void start(){
+		animator.start();
+	}
+	
+	public void addToDraw(Drawable drawable){
+		this.drawable.add(drawable);
+	}
+	
 	@Override
 	public void init(GLAutoDrawable drawable) {
 		gl = drawable.getGL().getGL2();

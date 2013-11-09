@@ -9,10 +9,12 @@ public class Joint {
 	private Point3D position;
 	private double posConfidence;
 	
-	public Joint(String name, double px, double py, double pz, double posConfidence){
+	public Joint(String name, String parent, double px, double py, double pz, double posConfidence){
 		this.name = name;
-		position = new Point3D(px, px, pz);
+		this.parent = parent;
+		position = new Point3D(px, py, pz);
 		this.posConfidence = posConfidence;
+		
 	}
 	
 	public String getName() {
@@ -40,6 +42,8 @@ public class Joint {
 		this.posConfidence = posConfidence;
 	}
 	
-	
+	public String toString(){
+		return name+" "+parent+" ["+position.getX()+", "+position.getY()+", "+position.getZ()+"]";
+	}
 	
 }

@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.media.opengl.GL2;
 
+import main.Constant;
 import opengl.Drawable;
 
 public class SkeletonSequence extends Drawable{
@@ -15,14 +16,16 @@ public class SkeletonSequence extends Drawable{
 	private Vector<String> jointType;
 	private int FPS, SPF;
 	
-	public SkeletonSequence(){
+	private JointHierarchy jointH;
+	
+	private static int frameIndex = 0, skipFrame;
+	
+	public SkeletonSequence(JointHierarchy jointH){
+		
+		this.jointH = jointH;
 		
 		sequence = new Vector<>();
 		jointType = new Vector<>();
-	}
-	
-	public void add(Skeleton skeleton){
-		sequence.add(skeleton);
 	}
 	
 	public Vector<Skeleton> getSequence(){
@@ -39,11 +42,11 @@ public class SkeletonSequence extends Drawable{
 	
 	public void loadSequence(String path) throws FileNotFoundException{
 		
-		Scanner scaner = new Scanner(new File(path));
+		Scanner scanner = new Scanner(new File(path));
 		
 		Skeleton skel = null;
-		while(scaner.hasNext()){
-			String[] tok = scaner.nextLine().split(" ");
+		while(scanner.hasNext()){
+			String[] tok = scanner.nextLine().split(" ");
 			
 			if(tok.length<2) continue;
 			
@@ -54,19 +57,24 @@ public class SkeletonSequence extends Drawable{
 			}else if(tok[0].equalsIgnoreCase("jt")){
 				jointType.add(tok[1]);
 			}else if(tok[0].equalsIgnoreCase("t")){
+				if(skel!=null){
+					sequence.add(skel);
+				}
 				skel = new Skeleton(Long.parseLong(tok[1]));
 			}else if(tok[0].equalsIgnoreCase("j")){
 				skel.add(constructJoint(tok));
 			}
 		}
+		skipFrame = FPS/SPF;
 		
-		scaner.close();
+		scanner.close();
 	}
 	
 	private Joint constructJoint(String[] tok){
 		
 		return new Joint(
 				tok[1], 
+				jointH.getParent(tok[1]),
 				Double.parseDouble(tok[2]),
 				Double.parseDouble(tok[3]),
 				Double.parseDouble(tok[4]),
@@ -75,7 +83,43 @@ public class SkeletonSequence extends Drawable{
 
 	@Override
 	public void draw(GL2 gl) {
+		if(sequence.isEmpty()) return;
 		
+		//sync
+		skipFrame--;
+		if(skipFrame!=0){
+			return;
+		}else{
+			skipFrame = FPS/SPF;
+		}
 		
+		//frame index
+		if(sequence.size()<=frameIndex){
+			frameIndex = 0;
+		}
+		
+		gl.glPushMatrix();
+		gl.glColor3f(1f, 0f, 0f);
+		
+		for(String type : jointType){
+			Joint child = sequence.get(frameIndex).getJoint(type);
+			Joint parent = sequence.get(frameIndex).getJoint(child.getParent());
+
+			gl.glBegin(GL2.GL_LINE_LOOP);
+				gl.glVertex3d(
+					parent.getPosition().getX()/Constant.POSITION_SCALING,
+					parent.getPosition().getY()/Constant.POSITION_SCALING,
+					parent.getPosition().getZ()/Constant.POSITION_SCALING);
+				gl.glVertex3d(
+						child.getPosition().getX()/Constant.POSITION_SCALING,
+						child.getPosition().getY()/Constant.POSITION_SCALING,
+						child.getPosition().getZ()/Constant.POSITION_SCALING);
+				
+			gl.glEnd();
+		}
+		
+		gl.glPopMatrix();
+		
+		frameIndex++;
 	}
 }
