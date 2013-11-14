@@ -39,8 +39,10 @@ public class Grid extends Drawable{
             for (int j = -gridSize; j <= gridSize; j++) {
                 if (flag) {
                     gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, white, 0);
+                    gl.glColor3f(1f, 1f, 1f);
                 } else {
                     gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, black, 0);
+                    gl.glColor3f(0f, 0f, 0f);
                 }
                 flag = !flag;
                 gl.glBegin(GL2.GL_QUADS);

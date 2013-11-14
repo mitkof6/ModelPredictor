@@ -8,7 +8,9 @@ import java.util.Vector;
 import javax.media.opengl.GL2;
 
 import main.Constant;
+import math.geom3d.Point3D;
 import opengl.Drawable;
+import predictor.KalmanFilter;
 
 public class SkeletonSequence extends Drawable{
 
@@ -38,6 +40,10 @@ public class SkeletonSequence extends Drawable{
 	
 	public int getSPF(){
 		return SPF;
+	}
+	
+	public Vector<String> getJointType(){
+		return jointType;
 	}
 	
 	public void loadSequence(String path) throws FileNotFoundException{
@@ -70,15 +76,38 @@ public class SkeletonSequence extends Drawable{
 		scanner.close();
 	}
 	
+	public void applyFilter(){
+		
+		for(String type : jointType){
+			KalmanFilter kX = new KalmanFilter();
+			KalmanFilter kY = new KalmanFilter();
+			KalmanFilter kZ = new KalmanFilter();
+			for(Skeleton skel : sequence){
+				Joint j = skel.getJoint(type);
+				
+				j.setPosition(new Point3D(
+						kX.update(j.getPosition().getX()), 
+						kY.update(j.getPosition().getY()), 
+						kZ.update(j.getPosition().getZ())));
+				
+			}
+		}
+	}
+	
 	private Joint constructJoint(String[] tok){
 		
 		return new Joint(
 				tok[1], 
 				jointH.getParent(tok[1]),
-				Double.parseDouble(tok[2]),
-				Double.parseDouble(tok[3]),
-				Double.parseDouble(tok[4]),
-				Double.parseDouble(tok[5]));//TODO orientation
+				Float.parseFloat(tok[2]),
+				Float.parseFloat(tok[3]),
+				Float.parseFloat(tok[4]),
+				Float.parseFloat(tok[5]),
+				Float.parseFloat(tok[6]),
+				Float.parseFloat(tok[7]),
+				Float.parseFloat(tok[8]),
+				Float.parseFloat(tok[9]),
+				Float.parseFloat(tok[10]));
 	}
 
 	@Override
@@ -99,7 +128,7 @@ public class SkeletonSequence extends Drawable{
 		}
 		
 		gl.glPushMatrix();
-		gl.glColor3f(1f, 0f, 0f);
+		gl.glColor3f(1.0f, 0.0f, 0.0f);
 		
 		for(String type : jointType){
 			Joint child = sequence.get(frameIndex).getJoint(type);

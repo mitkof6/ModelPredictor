@@ -34,14 +34,17 @@ public class Axis extends Drawable{
 		gl.glLineWidth(axisWidth);
 		gl.glBegin(GL2.GL_LINES);
 			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, red, 0);
+			gl.glColor3f(1.0f, 0f, 0f);
 			gl.glVertex3f(0.f, 0.f, 0.f);
 			gl.glVertex3f(axisLength, 0.f, 0.f);
 
 			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, green, 0);
+			gl.glColor3f(0.0f, 1.0f, 0f);
 			gl.glVertex3f(0.f, 0.f, 0.f);
 			gl.glVertex3f(0.f, axisLength, 0.f);
 
 			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, blue, 0);
+			gl.glColor3f(0.0f, 0f, 1.0f);
 			gl.glVertex3f(0.f, 0.f, 0.f);
 			gl.glVertex3f(0.f, 0.f, axisLength);
 			gl.glEnd();

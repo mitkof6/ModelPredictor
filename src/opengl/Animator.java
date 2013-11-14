@@ -128,9 +128,9 @@ public class Animator extends Frame implements GLEventListener {
 		//light
 		//float[] diffuse = {0.5f, 0.5f, 0.5f};
 		//gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuse, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, Constant.LIGHT_POSITION, 0);
-		gl.glEnable(GL2.GL_LIGHTING);
-        gl.glEnable(GL2.GL_LIGHT0);
+		//gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, Constant.LIGHT_POSITION, 0);
+		//gl.glEnable(GL2.GL_LIGHTING);
+        //gl.glEnable(GL2.GL_LIGHT0);
 	}
 
 	@Override

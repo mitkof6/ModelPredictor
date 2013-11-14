@@ -2,6 +2,10 @@ package main;
 
 public class Constant {
 	
+	public static String SKELETON_FILE = "skeleton.txt";
+	public static String SKELETON_HIERARCHY_FILE = "hierarchy.txt";
+	public static String POINT_CLOUD_FILE = "point-cloud.txt";
+	
 	//scaling
 	public static int POSITION_SCALING = 100;
 
@@ -38,5 +42,5 @@ public class Constant {
 	public static int AXIS_LENGTH = 10;
 	public static final int AXIS_WIDTH = 3;
 	
-	public static int FLOOR_Y = -10;
+	public static int FLOOR_Y = -14;
 }
